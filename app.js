@@ -44,3 +44,45 @@ const weekday = weekdays[futureDate.getDay()];
 const date = futureDate.getDate();
 giveaway.textContent = `giveaway ends on ${weekday}, ${date} ${month} ${year} ${hours}:${minutes}am`;
 
+// Future time in ms
+const futureTime = futureDate.getTime()
+
+function getRemainingTime() {
+  const today = new Date().getTime();
+  const t = futureTime - today;
+
+  // valures in ms
+  const oneDay = 24*60*60*1000;
+  const oneHour = 60*60*1000;
+  const oneMinutes = 60*1000;
+  // Calculate all values
+  let days = t / oneDay;
+  days = Math.floor(days);
+  let hours = Math.floor((t % oneDay) / oneHour);
+  let minutes = Math.floor((t % oneHour) / oneMinutes);
+  let seconds = Math.floor((t % oneMinutes) / 1000);
+
+  // Set values array
+  const values = [days,hours,minutes,seconds];
+
+  function format(item) {
+    if (item < 10) {
+      return item = `0${item}`
+    }
+    return item
+  }
+  items.forEach((item,index)=> {
+    item.innerHTML = values[index]
+  })
+  if (t<0) {
+    clearInterval(countdown);
+    deadline.innerHTML = `<h4 class =""expired>
+      sorry this giveaway
+    </h4>`
+  }
+}
+
+// Countdown
+let countdown = setInterval(getRemainingTime, 1000)
+
+getRemainingTime()
